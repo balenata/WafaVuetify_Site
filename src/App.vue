@@ -1,32 +1,54 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app id="inspire">
+    <Navbar v-show="toggle" />
+    <v-main>
+      <router-view />
+      <Scroll />
+    </v-main>
+    <Footer v-show="toggle" />
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+import Navbar from './components/audience/Navbar.vue'
+import Footer from './components/audience/Footer.vue'
+import Scroll from './components/audience/ScrollOnTop.vue'
+export default {
+  components: {
+    Navbar,
+    Footer,
+    Scroll
+  },
+  data() {
+    return {
+      toggle: true,
+      loggedIn: localStorage.setItem('loggedIN', false)
+    }
+  },
+  watch: {
+    $route: {
+      immediate: true,
+      handler() {
+        if (
+          this.$route.path === '/admin' ||
+          this.$route.path === '/login' ||
+          this.$route.path === '/admin/admin-quote' ||
+          this.$route.path === '/admin/admin-blog' ||
+          this.$route.path === '/admin/admin-discount' ||
+          this.$route.path === '/admin/admin-slideshow'
+        ) {
+          this.toggle = false
+        }
+      }
+    }
+  }
 }
+</script>
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+<style scoped>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 </style>
